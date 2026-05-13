@@ -88,24 +88,31 @@ The goal was to identify gaps, strengthen weak areas, and build deeper understan
    ```bash
    lsof -i :8080
    ss -tulnp | grep 8080
+
+
 set -euo pipefail
 → Makes script safer by stopping on errors and undefined variables
+
 git reset --hard vs git revert
 → Reset removes history
 → Revert creates a new commit to undo changes
+
 Recommended branching strategy
 → GitHub Flow (simple and effective for small teams)
+
 git stash
 → Temporarily saves uncommitted changes
 
 Schedule script at 3 AM
-
 0 3 * * * /path/to/script.sh
+
 git fetch vs git pull
 → Fetch downloads changes
 → Pull = fetch + merge
+
 LVM
 → Flexible disk management system for resizing and better storage handling
+
 🧠 Teach Back
 What is Git Branching?
 
