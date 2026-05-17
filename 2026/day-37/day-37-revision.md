@@ -1,124 +1,103 @@
-# Docker Cheat Sheet
+# Day 37 – Docker Revision & Self-Assessment
 
-## Container Commands
+## Self-Assessment Checklist
 
-| Command | Usage |
+| Topic | Status |
 |---|---|
-| `docker run nginx` | Run a container from an image |
-| `docker run -it ubuntu bash` | Run container in interactive mode |
-| `docker run -d nginx` | Run container in detached mode |
-| `docker ps` | List running containers |
-| `docker ps -a` | List all containers |
-| `docker stop <container>` | Stop a running container |
-| `docker start <container>` | Start a stopped container |
-| `docker restart <container>` | Restart a container |
-| `docker rm <container>` | Remove a container |
-| `docker exec -it <container> bash` | Access container shell |
-| `docker logs <container>` | View container logs |
-| `docker inspect <container>` | View detailed container info |
+| Run a container from Docker Hub (interactive + detached) | Can Do |
+| List, stop, remove containers and images | Can Do |
+| Explain image layers and how caching works | Shaky |
+| Write a Dockerfile from scratch with FROM, RUN, COPY, WORKDIR, CMD | Can Do |
+| Explain CMD vs ENTRYPOINT | Shaky |
+| Build and tag a custom image | Can Do |
+| Create and use named volumes | Can Do |
+| Use bind mounts | Can Do |
+| Create custom networks and connect containers | Can Do |
+| Write a docker-compose.yml for a multi-container app | Can Do |
+| Use environment variables and .env files in Compose | Can Do |
+| Write a multi-stage Dockerfile | Can Do |
+| Push an image to Docker Hub | Can Do |
+| Use healthchecks and depends_on | Can Do |
 
 ---
 
-## Image Commands
+# Quick-Fire Questions
 
-| Command | Usage |
-|---|---|
-| `docker pull nginx` | Download image from Docker Hub |
-| `docker images` | List local images |
-| `docker build -t myapp:v1 .` | Build image from Dockerfile |
-| `docker tag myapp:v1 username/myapp:v1` | Tag image |
-| `docker push username/myapp:v1` | Push image to Docker Hub |
-| `docker rmi <image>` | Remove image |
-| `docker image prune` | Remove unused images |
+## 1. What is the difference between an image and a container?
+
+- An image is a blueprint/template.
+- A container is a running instance of an image.
 
 ---
 
-## Volume Commands
+## 2. What happens to data inside a container when you remove it?
 
-| Command | Usage |
-|---|---|
-| `docker volume create myvolume` | Create named volume |
-| `docker volume ls` | List volumes |
-| `docker volume inspect myvolume` | Inspect volume |
-| `docker volume rm myvolume` | Remove volume |
-| `docker run -v myvolume:/data nginx` | Mount named volume |
+- Container data is lost unless stored in volumes or bind mounts.
 
 ---
 
-## Bind Mounts
+## 3. How do two containers on the same custom network communicate?
 
-| Command | Usage |
-|---|---|
-| `docker run -v $(pwd):/app nginx` | Mount local directory into container |
+- They communicate using container names as hostnames.
 
----
+Example: ping mongodb
 
-## Network Commands
+--- 
+## 4. What does docker compose down -v do differently from docker compose down?
+- docker compose down removes containers and networks.
+- docker compose down -v also removes volumes.
 
-| Command | Usage |
-|---|---|
-| `docker network create mynet` | Create custom network |
-| `docker network ls` | List networks |
-| `docker network inspect mynet` | Inspect network |
-| `docker network connect mynet container1` | Connect container to network |
-| `docker run --network=mynet nginx` | Run container on custom network |
+## 5. Why are multi-stage builds useful?
+- They reduce image size by separating build dependencies from production runtime.
 
----
+## 6. What is the difference between COPY and ADD?
+- COPY only copies files/directories.
+- ADD can also extract archives and download URLs.
 
-## Docker Compose Commands
+## 7. What does -p 8080:80 mean?
+- Maps host port 8080 to container port 80.
 
-| Command | Usage |
-|---|---|
-| `docker compose up` | Start services |
-| `docker compose up -d` | Start services in detached mode |
-| `docker compose down` | Stop and remove services |
-| `docker compose down -v` | Remove services and volumes |
-| `docker compose ps` | List compose services |
-| `docker compose logs` | View compose logs |
-| `docker compose build` | Build compose services |
+## 8. How do you check how much disk space Docker is using?
+- docker system df
 
----
 
-## Cleanup Commands
+## Weak Areas Revisited
+1. CMD vs ENTRYPOINT
 
-| Command | Usage |
-|---|---|
-| `docker system df` | Check Docker disk usage |
-| `docker system prune` | Remove unused Docker data |
-| `docker container prune` | Remove stopped containers |
-| `docker volume prune` | Remove unused volumes |
-| `docker network prune` | Remove unused networks |
+# CMD
+- Provides default arguments/commands.
+- Can be overridden easily.
 
----
+Example: CMD ["npm", "start"]
 
-## Dockerfile Instructions
+# ENTRYPOINT
+- Defines the main container executable.
+- Harder to override.
 
-| Instruction | Purpose |
-|---|---|
-| `FROM` | Base image |
-| `RUN` | Execute commands during build |
-| `COPY` | Copy files into image |
-| `ADD` | Copy files + extract archives/URLs |
-| `WORKDIR` | Set working directory |
-| `EXPOSE` | Document container port |
-| `ENV` | Set environment variables |
-| `CMD` | Default command to run |
-| `ENTRYPOINT` | Main executable for container |
+Example: ENTRYPOINT ["python3"]
 
----
+2. Image Layers & Caching
+- Every Dockerfile instruction creates a layer.
+- Docker reuses unchanged layers from cache.
+- Efficient layer ordering speeds up builds.
 
-## Common Port Mapping
+# Best Practice:
+- Put dependency installation before copying app source code.
 
-| Command | Meaning |
-|---|---|
-| `-p 8080:80` | Map host port 8080 to container port 80 |
+Example:
 
----
+COPY package.json .
+RUN npm install
 
-## Helpful Tips
+COPY . .
+Revision Summary
 
-- Containers are temporary, images are templates.
-- Use `.dockerignore` to reduce image size.
-- Multi-stage builds create smaller production images.
-- Named volumes persist data after container removal.
-- Custom networks allow containers to communicate using container names.
+- Today was focused on revising core Docker concepts from Days 29–36.
+
+## Key takeaways:
+
+- Docker volumes persist data.
+- Multi-stage builds reduce image size.
+- Compose simplifies multi-container setups.
+- Healthchecks improve service reliability.
+- Docker caching speeds up builds significantly.

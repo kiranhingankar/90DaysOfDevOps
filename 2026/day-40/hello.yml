@@ -1,0 +1,43 @@
+# Workflow name displayed in GitHub Actions tab
+name: First github actions workflow
+
+# Defines when the workflow should run
+on:
+  # Trigger workflow on every push event
+  push:
+
+# Collection of jobs in this workflow
+jobs:
+
+  # Job ID
+  greet:
+
+    # Runner environment (virtual machine)
+    runs-on: ubuntu-latest
+
+    # Sequence of steps executed in the job
+    steps:
+
+      # Step 1: Checkout repository code into runner
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # Step 2: Print hello message in logs
+      - name: Print Hello Message
+        run: echo "Hello from Github Actions!"
+
+      # Step 3: Display current date and time
+      - name: Print current Date and Time
+        run: date
+
+      # Step 4: Print branch name that triggered workflow
+      - name: Print Branch Name
+        run: echo "Branch Name:" ${{ github.ref_name }}
+
+      # Step 5: List all repository files and folders
+      - name: List Repository files
+        run: ls -la
+
+      # Step 6: Print operating system of GitHub runner
+      - name: Print Runner Operating System
+        run: echo "Runner OS:" $RUNNER_OS
